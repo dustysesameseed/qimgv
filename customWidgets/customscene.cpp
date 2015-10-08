@@ -9,5 +9,7 @@ CustomScene::~CustomScene()
 }
 
 void CustomScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    emit sceneClick(event->scenePos());
+    if (event->button() == Qt::LeftButton){
+        emit sceneClick(event->scenePos());
+    }
 }

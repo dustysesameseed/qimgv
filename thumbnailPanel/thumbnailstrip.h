@@ -59,6 +59,8 @@ private:
 signals:
     void thumbnailRequested(int pos);
     void thumbnailClicked(int pos);
+    void signalPrevThumb();
+    void signalNextThumb();
 
 public slots:
     void populate(int count);
@@ -72,6 +74,7 @@ public slots:
 protected:
     void wheelEvent(QWheelEvent *event);
     void leaveEvent(QEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private slots:
     void centerOnSmooth(const QPointF &pos);

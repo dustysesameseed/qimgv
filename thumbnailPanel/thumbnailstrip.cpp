@@ -230,6 +230,15 @@ void ThumbnailStrip::wheelEvent(QWheelEvent *event) {
     timeLine->start();
 }
 
+void ThumbnailStrip::mouseReleaseEvent(QMouseEvent *event){
+    if (event->button() == Qt::XButton1){
+        emit signalPrevThumb();
+    }
+    else if (event->button() == Qt::XButton2){
+        emit signalNextThumb();
+    }
+}
+
 void ThumbnailStrip::parentResized(QSize parentSz) {
     if(position == BOTTOM) {
         this->setGeometry( QRect(QPoint(0, parentSz.height() - panelSize + 1),

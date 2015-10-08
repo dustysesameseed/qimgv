@@ -54,6 +54,12 @@ void MainWindow::init() {
 
     connect(this, SIGNAL(resized(QSize)), panel, SLOT(parentResized(QSize)));
 
+    connect(panel, SIGNAL(signalNextThumb()),
+            this, SIGNAL(signalNextImage()));
+
+    connect(panel, SIGNAL(signalPrevThumb()),
+            this, SIGNAL(signalPrevImage()));
+
     connect(this, SIGNAL(signalNextImage()),
             core, SLOT(slotNextImage()));
 
@@ -572,6 +578,16 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
             panel->show();
         }
         event->ignore();
+    }
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *event){
+
+    if (event->button() == Qt::XButton1){
+        emit signalPrevImage();
+    }
+    else if (event->button() == Qt::XButton2){
+        emit signalNextImage();
     }
 }
 
