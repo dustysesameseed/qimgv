@@ -272,6 +272,37 @@ void ImageViewer::mouseMoveEvent(QMouseEvent* event) {
     }
 }
 
+void ImageViewer::wheelEvent(QWheelEvent *event) {
+    if(!isDisplaying()) {
+        return;
+    }
+
+    fixedZoomPoint = event->pos();
+    float step = (maxScale - minScale) / -10.0;
+    float newScale = currentScale;
+    event->accept();
+
+    if(event->angleDelta().ry() < 0) {
+          newScale = currentScale - step;
+    }
+    else {
+           newScale = currentScale + step;
+    }
+
+    if (newScale>minScale) {
+        return;
+    }
+    else if (newScale<maxScale){
+        return;
+    }
+
+    imageFitMode = FREE;
+    scaleAround(fixedZoomPoint, newScale);
+    resizeTimer->stop();
+    resizeTimer->start(65);
+    update();
+}
+
 void ImageViewer::mouseReleaseEvent(QMouseEvent* event) {
     QWidget::mouseReleaseEvent(event);
     if(!isDisplaying()) {
@@ -396,7 +427,7 @@ void ImageViewer::mouseDoubleClickEvent(QMouseEvent *event) {
     if(event->button() == Qt::RightButton) {
         emit sendRightDoubleClick();
     }
-    else {
+    else if (event->button() == Qt::LeftButton) {
         emit sendDoubleClick();
     }
 }

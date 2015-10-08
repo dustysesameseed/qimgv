@@ -45,8 +45,7 @@ void SettingsDialog::readSettings() {
     ui->fitModeComboBox->setCurrentIndex(tmp);
 
     // ##### UI #####
-    //not implemented
-    ui->scalingQualityComboBox->setDisabled(true);
+    ui->scalingQualityComboBox->setEnabled(true);
 
     ui->fullscreenCheckBox->setChecked(globalSettings->fullscreenMode());
     ui->thumbnailLabelsCheckBox->setChecked(globalSettings->showThumbnailLabels());

@@ -105,7 +105,7 @@ QString Video::filePath() {
     return info->getFilePath();
 }
 
-QImage* Video::rotated(int grad) {
+void Video::rotated(int grad) {
     Q_UNUSED(grad)
 }
 

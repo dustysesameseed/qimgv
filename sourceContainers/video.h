@@ -22,7 +22,7 @@ public:
     QSize size();
     QString filePath();
 
-    QImage *rotated(int grad);
+    void rotated(int grad);
     void rotate(int grad);
     QPixmap* generateThumbnail();
 

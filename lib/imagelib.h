@@ -10,8 +10,7 @@
 class ImageLib {
 public:
     ImageLib();
-    //void fastScale(QPixmap *dest, QPixmap* source, QSize destSize, bool smooth);
-    void bilinearScale(QPixmap *dest, QPixmap *source, QSize destSize, bool smooth);
+    void scaleImage(QPixmap *dest, QPixmap *source, QSize destSize, bool smooth);
 };
 
 #endif // IMAGELIB_H
