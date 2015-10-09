@@ -11,3 +11,10 @@
 /debug
 /x64
 /GeneratedFiles
+*.Release
+Makefile
+Makefile.Debug
+qimgv.pro.user
+object_script.qimgv.Debug
+ui_settingsdialog.h
+ui_settingsdialog.h

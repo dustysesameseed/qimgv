@@ -317,6 +317,11 @@ int Settings::mouseWheelMode(){
     return globalSettings->s.value("mouseWheelMode").toInt();
 }
 
+void Settings::toggleMouseWheelMode(){
+    int mode = globalSettings->s.value("mouseWheelMode").toInt() == 1 ? 0 : 1;
+    setMouseWheelMode(mode);
+}
+
 void Settings::setMouseWheelMode(int mode){
     globalSettings->s.setValue("mouseWheelMode", mode);
 }

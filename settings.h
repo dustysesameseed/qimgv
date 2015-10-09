@@ -67,6 +67,7 @@ public:
     bool zoomWheelMode();
     bool navWheelMode();
     int mouseWheelMode();
+    void toggleMouseWheelMode();
     void setMouseWheelMode(int mode);
 
     // Internal

@@ -589,6 +589,9 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
     else if (event->button() == Qt::XButton2){
         emit signalNextImage();
     }
+    else if (event->button() == Qt::MiddleButton){
+        globalSettings->toggleMouseWheelMode();
+    }
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event) {
