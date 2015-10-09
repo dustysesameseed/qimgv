@@ -42,20 +42,6 @@ void Settings::validate() {
     }
 }
 
-QString Settings::tempDir() {
-    return tempDirectory->path()+"/";
-}
-
-QString Settings::ffmpegExecutable() {
-    return globalSettings->s.value("ffmpegExe", "").toString();
-    //QString tmp = "C:/Users/Eugene/Desktop/ffmpeg/bin/ffmpeg.exe";
-    //return tmp;
-}
-
-void Settings::setFfmpegExecutable(QString path) {
-    globalSettings->s.setValue("ffmpegExe", path);
-}
-
 //returns list of regexps
 QStringList Settings::supportedFormats() {
     QStringList filters;
@@ -85,20 +71,41 @@ QString Settings::supportedFormatsString() {
     return filters;
 }
 
-bool Settings::playVideos() {
-    return globalSettings->s.value("playVideos", true).toBool();
+QString Settings::tempDir() {
+    return tempDirectory->path()+"/";
 }
 
-void Settings::setPlayVideos(bool mode) {
-    globalSettings->s.setValue("playVideos", mode);
+// ##################################################
+// ##################  GENERAL  #####################
+// ##################################################
+
+/* 0: all
+ * 1: fit width
+ * 2: orginal size
+ */
+int Settings::imageFitMode() {
+    int mode = globalSettings->s.value("defaultFitMode", 0).toInt();
+    if(mode < 0 || mode > 2 ) {
+        qDebug() << "Settings: Invalid fit mode ( " + QString::number(mode) + " ). Resetting to default.";
+        mode = 0;
+    }
+    return mode;
 }
 
-bool Settings::playVideoSounds() {
-    return globalSettings->s.value("playVideoSounds", false).toBool();
+void Settings::setImageFitMode(int mode) {
+    if( mode < 0 || mode > 2 ) {
+        qDebug() << "Settings: Invalid fit mode ( " + QString::number(mode) + " ). Resetting to default.";
+        mode = 0;
+    }
+    globalSettings->s.setValue("defaultFitMode", mode);
 }
 
-void Settings::setPlayVideoSounds(bool mode) {
-    globalSettings->s.setValue("playVideoSounds", mode);
+bool Settings::useFastScale() {
+    return globalSettings->s.value("useFastScale", "false").toBool();
+}
+
+void Settings::setUseFastScale(bool mode) {
+    globalSettings->s.setValue("useFastScale", mode);
 }
 
 /* 0: By name (default)
@@ -123,48 +130,51 @@ void Settings::setSortingMode(int mode) {
     globalSettings->s.setValue("sortingMode", mode);
 }
 
-bool Settings::useFastScale() {
-    return globalSettings->s.value("useFastScale", "false").toBool();
+bool Settings::fullscreenMode() {
+    return globalSettings->s.value("openInFullscreen", true).toBool();
 }
 
-void Settings::setUseFastScale(bool mode) {
-    globalSettings->s.setValue("useFastScale", mode);
+void Settings::setFullscreenMode(bool mode) {
+    globalSettings->s.setValue("openInFullscreen", mode);
 }
 
-QString Settings::lastDirectory() {
-    return globalSettings->s.value("lastDir", "").toString();
+bool Settings::infiniteScrolling() {
+    return globalSettings->s.value("infiniteScrolling", false).toBool();
 }
 
-void Settings::setLastDirectory(QString path) {
-    globalSettings->s.setValue("lastDir", path);
+void Settings::setInfiniteScrolling(bool mode) {
+    globalSettings->s.setValue("infiniteScrolling", mode);
 }
 
-unsigned int Settings::lastFilePosition() {
-    bool ok = true;
-    unsigned int pos = globalSettings->s.value("lastFilePosition", "0").toInt(&ok);
-    if(!ok) {
-        qDebug() << "Settings: Invalid lastFilePosition. Resetting to 0.";
-        pos = 0;
-    }
-    return pos;
+bool Settings::playVideos() {
+    return globalSettings->s.value("playVideos", true).toBool();
 }
 
-void Settings::setLastFilePosition(unsigned int pos) {
-    globalSettings->s.setValue("lastFilePosition", pos);
+void Settings::setPlayVideos(bool mode) {
+    globalSettings->s.setValue("playVideos", mode);
 }
 
-unsigned int Settings::thumbnailSize() {
-    bool ok = true;
-    unsigned int size = globalSettings->s.value("thumbnailSize", thumbnailSizeDefault).toInt(&ok);
-    if(!ok) {
-        size = thumbnailSizeDefault;
-    }
-    return size;
+bool Settings::playVideoSounds() {
+    return globalSettings->s.value("playVideoSounds", false).toBool();
 }
 
-void Settings::setThumbnailSize(unsigned int size) {
-    globalSettings->s.setValue("thumbnailSize", size);
+void Settings::setPlayVideoSounds(bool mode) {
+    globalSettings->s.setValue("playVideoSounds", mode);
 }
+
+QString Settings::ffmpegExecutable() {
+    return globalSettings->s.value("ffmpegExe", "").toString();
+    //QString tmp = "C:/Users/Eugene/Desktop/ffmpeg/bin/ffmpeg.exe";
+    //return tmp;
+}
+
+void Settings::setFfmpegExecutable(QString path) {
+    globalSettings->s.setValue("ffmpegExe", path);
+}
+
+// ##################################################
+// ###################  LOADER  #####################
+// ##################################################
 
 bool Settings::usePreloader() {
     return globalSettings->s.value("usePreloader", true).toBool();
@@ -173,6 +183,18 @@ bool Settings::usePreloader() {
 void Settings::setUsePreloader(bool mode) {
     globalSettings->s.setValue("usePreloader", mode);
 }
+
+bool Settings::reduceRamUsage() {
+    return globalSettings->s.value("reduceRamUsage", false).toBool();
+}
+
+void Settings::setReduceRamUsage(bool mode) {
+    globalSettings->s.setValue("reduceRamUsage", mode);
+}
+
+// ##################################################
+// #################  APPEARANCE  ###################
+// ##################################################
 
 QColor Settings::backgroundColor() {
     return globalSettings->s.value("bgColor", QColor(14,14,14)).value<QColor>();
@@ -190,28 +212,17 @@ void Settings::setAccentColor(QColor color) {
     globalSettings->s.setValue("accentColor", color);
 }
 
-bool Settings::fullscreenMode() {
-    return globalSettings->s.value("openInFullscreen", true).toBool();
+unsigned int Settings::thumbnailSize() {
+    bool ok = true;
+    unsigned int size = globalSettings->s.value("thumbnailSize", thumbnailSizeDefault).toInt(&ok);
+    if(!ok) {
+        size = thumbnailSizeDefault;
+    }
+    return size;
 }
 
-void Settings::setFullscreenMode(bool mode) {
-    globalSettings->s.setValue("openInFullscreen", mode);
-}
-
-bool Settings::menuBarHidden() {
-    return globalSettings->s.value("hideMenuBar", true).toBool();
-}
-
-void Settings::setMenuBarHidden(bool mode) {
-    globalSettings->s.setValue("hideMenuBar", mode);
-}
-
-bool Settings::showThumbnailLabels() {
-    return globalSettings->s.value("showThumbnailLabels", true).toBool();
-}
-
-void Settings::setShowThumbnailLabels(bool mode) {
-    globalSettings->s.setValue("showThumbnailLabels", mode);
+void Settings::setThumbnailSize(unsigned int size) {
+    globalSettings->s.setValue("thumbnailSize", size);
 }
 
 PanelPosition Settings::panelPosition() {
@@ -238,25 +249,47 @@ void Settings::setPanelPosition(PanelPosition pos) {
     globalSettings->s.setValue("panelPosition", posString);
 }
 
-/* 0: all
- * 1: fit width
- * 2: orginal size
- */
-int Settings::imageFitMode() {
-    int mode = globalSettings->s.value("defaultFitMode", 0).toInt();
-    if(mode < 0 || mode > 2 ) {
-        qDebug() << "Settings: Invalid fit mode ( " + QString::number(mode) + " ). Resetting to default.";
-        mode = 0;
-    }
-    return mode;
+bool Settings::showThumbnailLabels() {
+    return globalSettings->s.value("showThumbnailLabels", true).toBool();
 }
 
-void Settings::setImageFitMode(int mode) {
-    if( mode < 0 || mode > 2 ) {
-        qDebug() << "Settings: Invalid fit mode ( " + QString::number(mode) + " ). Resetting to default.";
-        mode = 0;
+void Settings::setShowThumbnailLabels(bool mode) {
+    globalSettings->s.setValue("showThumbnailLabels", mode);
+}
+
+
+// ##################################################
+// ##################  INTERNAL  ####################
+// ##################################################
+
+QString Settings::lastDirectory() {
+    return globalSettings->s.value("lastDir", "").toString();
+}
+
+void Settings::setLastDirectory(QString path) {
+    globalSettings->s.setValue("lastDir", path);
+}
+
+unsigned int Settings::lastFilePosition() {
+    bool ok = true;
+    unsigned int pos = globalSettings->s.value("lastFilePosition", "0").toInt(&ok);
+    if(!ok) {
+        qDebug() << "Settings: Invalid lastFilePosition. Resetting to 0.";
+        pos = 0;
     }
-    globalSettings->s.setValue("defaultFitMode", mode);
+    return pos;
+}
+
+void Settings::setLastFilePosition(unsigned int pos) {
+    globalSettings->s.setValue("lastFilePosition", pos);
+}
+
+bool Settings::menuBarHidden() {
+    return globalSettings->s.value("hideMenuBar", true).toBool();
+}
+
+void Settings::setMenuBarHidden(bool mode) {
+    globalSettings->s.setValue("hideMenuBar", mode);
 }
 
 QByteArray Settings::windowGeometry() {
@@ -267,21 +300,9 @@ void Settings::setWindowGeometry(QByteArray geometry) {
     globalSettings->s.setValue("windowGeometry", geometry);
 }
 
-bool Settings::reduceRamUsage() {
-    return globalSettings->s.value("reduceRamUsage", false).toBool();
-}
 
-void Settings::setReduceRamUsage(bool mode) {
-    globalSettings->s.setValue("reduceRamUsage", mode);
-}
 
-bool Settings::infiniteScrolling() {
-    return globalSettings->s.value("infiniteScrolling", false).toBool();
-}
 
-void Settings::setInfiniteScrolling(bool mode) {
-    globalSettings->s.setValue("infiniteScrolling", mode);
-}
 
 void Settings::sendChangeNotification() {
     emit settingsChanged();

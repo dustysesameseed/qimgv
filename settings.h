@@ -25,51 +25,58 @@ public:
     static void validate();
     QStringList supportedFormats();
     QString supportedFormatsString();
-    int sortingMode();
-    void setSortingMode(int);
+    QString tempDir();
 
-    bool useFastScale();
-    void setUseFastScale(bool mode);
-    QString lastDirectory();
-    void setLastDirectory(QString path);
-    unsigned int lastFilePosition();
-    void setLastFilePosition(unsigned int pos);
-    unsigned int thumbnailSize();
-    void setThumbnailSize(unsigned int size);
-    bool usePreloader();
-    void setUsePreloader(bool mode);
-    QColor backgroundColor();
-    void setBackgroundColor(QColor color);
-    QColor accentColor();
-    void setAccentColor(QColor color);
-    bool fullscreenMode();
-    void setFullscreenMode(bool mode);
-    bool menuBarHidden();
-    void setMenuBarHidden(bool mode);
+    // General Settings
     int imageFitMode();
     void setImageFitMode(int mode);
-    QByteArray windowGeometry();
-    void setWindowGeometry(QByteArray geometry);
-    bool reduceRamUsage();
-    void setReduceRamUsage(bool mode);
-
+    bool useFastScale();
+    void setUseFastScale(bool mode);
+    int sortingMode();
+    void setSortingMode(int);
+    bool fullscreenMode();
+    void setFullscreenMode(bool mode);
+    bool infiniteScrolling();
+    void setInfiniteScrolling(bool mode);
     bool playVideos();
     void setPlayVideos(bool mode);
     bool playVideoSounds();
     void setPlayVideoSounds(bool mode);
-    QString tempDir();
-
     QString ffmpegExecutable();
     void setFfmpegExecutable(QString path);
+
+    // Loader
+    bool usePreloader();
+    void setUsePreloader(bool mode);
+    bool reduceRamUsage();
+    void setReduceRamUsage(bool mode);
+
+    // Appearance
+    QColor backgroundColor();
+    void setBackgroundColor(QColor color);
+    QColor accentColor();
+    void setAccentColor(QColor color);
+    unsigned int thumbnailSize();
+    void setThumbnailSize(unsigned int size);
+    PanelPosition panelPosition();
+    void setPanelPosition(PanelPosition);
     bool showThumbnailLabels();
     void setShowThumbnailLabels(bool mode);
 
-    PanelPosition panelPosition();
-    void setPanelPosition(PanelPosition);
+    // Internal
+    QString lastDirectory();
+    void setLastDirectory(QString path);
+    unsigned int lastFilePosition();
+    void setLastFilePosition(unsigned int pos);
+
+    bool menuBarHidden();
+    void setMenuBarHidden(bool mode);
+
+    QByteArray windowGeometry();
+    void setWindowGeometry(QByteArray geometry);
 
     ~Settings();
-    bool infiniteScrolling();
-    void setInfiniteScrolling(bool mode);
+
 private:
     explicit Settings(QObject *parent = 0);
     const int thumbnailSizeDefault = 135;

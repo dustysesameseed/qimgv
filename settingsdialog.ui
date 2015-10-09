@@ -46,6 +46,9 @@
      <height>28</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="text">
     <string>Cancel</string>
    </property>
@@ -58,6 +61,9 @@
      <width>71</width>
      <height>28</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
     <string>OK</string>
@@ -79,7 +85,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -144,7 +150,7 @@
     </widget>
     <widget class="QComboBox" name="scalingQualityComboBox">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>
@@ -590,7 +596,10 @@
     </widget>
    </widget>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="applyButton">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>430</x>
@@ -598,6 +607,9 @@
      <width>71</width>
      <height>28</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
     <string>Apply</string>
@@ -621,7 +633,7 @@
   <tabstop>sortingComboBox</tabstop>
   <tabstop>fullscreenCheckBox</tabstop>
   <tabstop>OK</tabstop>
-  <tabstop>pushButton</tabstop>
+  <tabstop>applyButton</tabstop>
   <tabstop>Cancel</tabstop>
   <tabstop>preloaderCheckBox</tabstop>
   <tabstop>reduceRamCheckBox</tabstop>
@@ -663,7 +675,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>applyButton</sender>
    <signal>clicked()</signal>
    <receiver>SettingsDialog</receiver>
    <slot>applySettings()</slot>
@@ -701,8 +713,8 @@
    <slot>bgColorDialog()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>172</x>
-     <y>75</y>
+     <x>174</x>
+     <y>72</y>
     </hint>
     <hint type="destinationlabel">
      <x>30</x>
@@ -717,12 +729,236 @@
    <slot>accentColorDialog()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>191</x>
-     <y>106</y>
+     <x>193</x>
+     <y>102</y>
     </hint>
     <hint type="destinationlabel">
      <x>33</x>
      <y>313</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fitModeComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>210</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>417</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fullscreenCheckBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>100</x>
+     <y>181</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>116</x>
+     <y>455</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>infiniteScrollingCheckBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>50</x>
+     <y>211</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>81</x>
+     <y>444</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ffmpegLineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>288</x>
+     <y>257</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>432</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>playSoundsCheckBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>95</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>349</x>
+     <y>445</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>playVideosCheckBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>344</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>363</x>
+     <y>487</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>scalingQualityComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>237</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>258</x>
+     <y>496</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sortingComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>527</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>preloaderCheckBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>25</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>105</x>
+     <y>472</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>reduceRamCheckBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>56</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>69</x>
+     <y>521</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cacheSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>225</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>237</x>
+     <y>552</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>thumbSizeComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>129</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>213</x>
+     <y>478</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>panelPositionComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>204</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>536</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>thumbnailLabelsCheckBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>itemAltered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>84</x>
+     <y>481</y>
     </hint>
    </hints>
   </connection>
@@ -732,5 +968,6 @@
   <slot>applySettings()</slot>
   <slot>bgColorDialog()</slot>
   <slot>accentColorDialog()</slot>
+  <slot>itemAltered()</slot>
  </slots>
 </ui>
