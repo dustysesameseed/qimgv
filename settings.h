@@ -63,6 +63,12 @@ public:
     bool showThumbnailLabels();
     void setShowThumbnailLabels(bool mode);
 
+    // Controls
+    bool zoomWheelMode();
+    bool navWheelMode();
+    int mouseWheelMode();
+    void setMouseWheelMode(int mode);
+
     // Internal
     QString lastDirectory();
     void setLastDirectory(QString path);

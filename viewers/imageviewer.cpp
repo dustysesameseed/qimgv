@@ -273,7 +273,8 @@ void ImageViewer::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void ImageViewer::wheelEvent(QWheelEvent *event) {
-    if(!isDisplaying()) {
+    if(!isDisplaying() || !globalSettings->zoomWheelMode()) {
+        event->ignore();
         return;
     }
 

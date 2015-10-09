@@ -301,8 +301,25 @@ void Settings::setWindowGeometry(QByteArray geometry) {
 }
 
 
+// ##################################################
+// ##################  CONTROLS  ####################
+// ##################################################
 
+bool Settings::zoomWheelMode(){
+    return globalSettings->s.value("mouseWheelMode", 1).toBool();
+}
 
+bool Settings::navWheelMode(){
+    return globalSettings->s.value("mouseWheelMode", 0).toBool();
+}
+
+int Settings::mouseWheelMode(){
+    return globalSettings->s.value("mouseWheelMode").toInt();
+}
+
+void Settings::setMouseWheelMode(int mode){
+    globalSettings->s.setValue("mouseWheelMode", mode);
+}
 
 void Settings::sendChangeNotification() {
     emit settingsChanged();

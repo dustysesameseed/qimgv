@@ -592,7 +592,8 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event){
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event) {
-    /*if(!panel->isHidden() && panel->rect().contains(event->pos())) {
+
+    if(!panel->isHidden() && panel->rect().contains(event->pos()) || globalSettings->navWheelMode()) {
         event->ignore();
         return;
     }
@@ -602,7 +603,7 @@ void MainWindow::wheelEvent(QWheelEvent *event) {
     }
     else {
         emit signalPrevImage();
-    }*/
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {

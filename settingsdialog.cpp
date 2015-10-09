@@ -19,38 +19,36 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
 void SettingsDialog::readSettings() {
 
-    bool setting;
 
+
+    // #### General ####
+
+    // fit mode
+    int tmp = globalSettings->imageFitMode();
+    ui->fitModeComboBox->setCurrentIndex(tmp);
+    // scaling
+    bool scaleMode = globalSettings->useFastScale();
+    ui->scalingQualityComboBox->setCurrentIndex(scaleMode ? 1 : 0);
+    // sorting mode
+    int sortMode = globalSettings->sortingMode();
+    ui->sortingComboBox->setCurrentIndex(sortMode);
+    // fullscreen, inf. scroll, video & sound
+    ui->fullscreenCheckBox->setChecked(globalSettings->fullscreenMode());
     ui->infiniteScrollingCheckBox->setChecked(globalSettings->infiniteScrolling());
     ui->playVideosCheckBox->setChecked(globalSettings->playVideos());
     ui->playSoundsCheckBox->setChecked(globalSettings->playVideoSounds());
-
+    //ffmpeg
     ui->ffmpegLineEdit->setText(globalSettings->ffmpegExecutable());
 
-    // ##### loader #####
+    // ##### Loader #####
+
+    // preloader, ram
     ui->preloaderCheckBox->setChecked(globalSettings->usePreloader());
     ui->reduceRamCheckBox->setChecked(globalSettings->reduceRamUsage());
-
-    // ##### cache #####
-    //ui->cacheSlider->setValue(globalSettings->s.value("cacheSize",64).toInt());
+    // cache
     ui->cacheLabel2->setNum(ui->cacheSlider->value());
 
-    // ##### scaling #####
-
-    setting = globalSettings->useFastScale();
-    ui->scalingQualityComboBox->setCurrentIndex(setting ? 1 : 0);
-
-    // ##### fit mode #####
-    int tmp = globalSettings->imageFitMode();
-    ui->fitModeComboBox->setCurrentIndex(tmp);
-
-    // ##### UI #####
-    ui->scalingQualityComboBox->setEnabled(true);
-
-    ui->fullscreenCheckBox->setChecked(globalSettings->fullscreenMode());
-    ui->thumbnailLabelsCheckBox->setChecked(globalSettings->showThumbnailLabels());
-
-    ui->panelPositionComboBox->setCurrentIndex(globalSettings->panelPosition());
+    // ##### Appearance #####
 
     //bg color
     QColor bgColor = globalSettings->backgroundColor();
@@ -76,30 +74,38 @@ void SettingsDialog::readSettings() {
                  break;
     }
 
-    // sorting mode
-    int mode = globalSettings->sortingMode();
-    ui->sortingComboBox->setCurrentIndex(mode);
+    // panel options
+    ui->panelPositionComboBox->setCurrentIndex(globalSettings->panelPosition());
+    ui->thumbnailLabelsCheckBox->setChecked(globalSettings->showThumbnailLabels());
+
+    // ##### Controls #####
+    ui->mouseWheelModeComboBox->setCurrentIndex(globalSettings->mouseWheelMode());
+
+
+    ui->applyButton->setDisabled(true);
 }
 
 void SettingsDialog::applySettings() {
-    //globalSettings->s.setValue("cacheSize", ui->cacheSlider->value());
-    globalSettings->setInfiniteScrolling(ui->infiniteScrollingCheckBox->isChecked());
-    globalSettings->setShowThumbnailLabels(ui->thumbnailLabelsCheckBox->isChecked());
-    globalSettings->setUsePreloader(ui->preloaderCheckBox->isChecked());
-    globalSettings->setFullscreenMode(ui->fullscreenCheckBox->isChecked());
+    ui->applyButton->setEnabled(false);
+    ui->applyButton->clearFocus();
+
+    // General
     globalSettings->setImageFitMode(ui->fitModeComboBox->currentIndex());
-    globalSettings->setSortingMode(ui->sortingComboBox->currentIndex());
-    globalSettings->setReduceRamUsage(ui->reduceRamCheckBox->isChecked());
-    globalSettings->setPlayVideos(ui->playVideosCheckBox->isChecked());
-    globalSettings->setPlayVideoSounds(ui->playSoundsCheckBox->isChecked());
-
-    globalSettings->setFfmpegExecutable(ui->ffmpegLineEdit->text());
-
     bool useFastScale = ui->scalingQualityComboBox->currentIndex() == 1;
     globalSettings->setUseFastScale(useFastScale);
+    globalSettings->setSortingMode(ui->sortingComboBox->currentIndex());
+    globalSettings->setFullscreenMode(ui->fullscreenCheckBox->isChecked());
+    globalSettings->setInfiniteScrolling(ui->infiniteScrollingCheckBox->isChecked());
+    globalSettings->setPlayVideos(ui->playVideosCheckBox->isChecked());
+    globalSettings->setPlayVideoSounds(ui->playSoundsCheckBox->isChecked());
+    globalSettings->setFfmpegExecutable(ui->ffmpegLineEdit->text());
 
-    globalSettings->setPanelPosition((PanelPosition)ui->panelPositionComboBox->currentIndex());
+    // Loader
+    globalSettings->setUsePreloader(ui->preloaderCheckBox->isChecked());
+    globalSettings->setReduceRamUsage(ui->reduceRamCheckBox->isChecked());
+    //globalSettings->s.setValue("cacheSize", ui->cacheSlider->value());
 
+    // Appearance
     globalSettings->setBackgroundColor(bgLabelPalette.color(QPalette::Window));
     globalSettings->setAccentColor(accentLabelPalette.color(QPalette::Window));
 
@@ -115,6 +121,14 @@ void SettingsDialog::applySettings() {
     } else if(index == 4) {
         globalSettings->setThumbnailSize(thumbSizeCustom);
     }
+
+    globalSettings->setPanelPosition((PanelPosition)ui->panelPositionComboBox->currentIndex());
+    globalSettings->setShowThumbnailLabels(ui->thumbnailLabelsCheckBox->isChecked());
+
+    // Controls
+    int wheelMode = ui->mouseWheelModeComboBox->currentIndex();
+    globalSettings->setMouseWheelMode(wheelMode);
+
     emit settingsChanged();
 }
 
@@ -131,6 +145,7 @@ void SettingsDialog::bgColorDialog() {
                                      "Background color.");
     bgLabelPalette.setColor(QPalette::Window, newColor);
     ui->bgColorLabel->setPalette(bgLabelPalette);
+    itemAltered();
 }
 
 void SettingsDialog::accentColorDialog() {
@@ -141,6 +156,11 @@ void SettingsDialog::accentColorDialog() {
                                      "Accent color.");
     accentLabelPalette.setColor(QPalette::Window, newColor);
     ui->accentColorLabel->setPalette(accentLabelPalette);
+    itemAltered();
+}
+
+void SettingsDialog::itemAltered(){
+    ui->applyButton->setEnabled(true);
 }
 
 SettingsDialog::~SettingsDialog() {

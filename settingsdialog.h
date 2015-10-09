@@ -35,6 +35,7 @@ private slots:
     void bgColorDialog();
 
     void accentColorDialog();
+    void itemAltered();
 signals:
     void settingsChanged();
 };
